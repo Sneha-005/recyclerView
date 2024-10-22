@@ -1,13 +1,12 @@
 package com.example.recyclerview
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.recyclerview.R
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,15 +27,6 @@ class MainActivity : AppCompatActivity() {
 
         var codeImageArray = arrayOf(
             R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-            R.drawable.gfg,
-
         )
 
         var codeHeadingArray = arrayOf(
@@ -51,14 +41,44 @@ class MainActivity : AppCompatActivity() {
             "Course in flask",
 
         )
+
+        val codeContent = arrayOf(
+
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+            getString(R.string.code_content),
+
+
+
+        )
         recyclerView.layoutManager = LinearLayoutManager(this)
         codeList = arrayListOf<code>()
 
-        for (index in codeImageArray.indices){
-            val code = code(codeHeadingArray[index],codeImageArray[index])
+        for (index in codeHeadingArray.indices){
+            val code = code(codeHeadingArray[index],codeImageArray[0],codeContent[index])
             codeList.add(code)
         }
 
-        recyclerView.adapter = MyAdapter(codeList,this)
+        var myAdapter = MyAdapter(codeList , this)
+
+        recyclerView.adapter = myAdapter
+        myAdapter.setItemClickListener(object : MyAdapter.onItemClickListener{
+            override fun onItemClick(position: Int) {
+                val intent =Intent(applicationContext, codeDetail::class.java)
+                intent.putExtra("heading",codeList[position].codeHeading)
+                intent.putExtra("imageId",codeList[position].codeImage)
+                intent.putExtra("content",codeList[position].codeContent)
+                startActivity(intent)
+
+            }
+
+        })
+
     }
 }
